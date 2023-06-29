@@ -1,6 +1,6 @@
 # Modo Kit Basic
-Welcome to the Modo Kit Basic! This repository serves as a foundational starting point for constructing 
-a basic Python kit for Foundry Modo. This open-source GitHub template repository has been diligently curated
+Welcome to Modo Kit Basic! This repository serves as a foundational starting point for constructing 
+a basic Python kit for Foundry Modo. This open-source GitHub template has been diligently curated
 to provide the minimally required elements needed to jumpstart your kit-building journey.
 
 ## What is Modo Kit Basic?
@@ -24,14 +24,21 @@ may be the right choice for you:
     from developers.
 
 ## How to Use Modo Kit Basic?
-Getting started with Modo Kit Basic is straightforward. Simply clone this repository and start modifying
-the template as per your specific requirements. We will soon add a step-by-step guide and best practices
-to help you make the most of this template repository.
+Getting started with Modo Kit Basic is straightforward. Simply select `Use this template` and create
+a new repository. This will copy the template into a new repository on your GitHub account for you to
+modify and change as needed. Since this is the basic version (No automation) you will need to manually
+change the name of the kit and commands.
+
+
+We will soon add a step-by-step guide and best practices to help you make
+the most of this template repository.
+
 
 ## Contribute
-We welcome contributions! Feel free to submit pull requests to help us improve and expand this template kit. If you have any questions or suggestions, feel free to open an issue.
-License
+We welcome contributions! Feel free to fork the repo and submit pull requests to help us improve and
+expand this template kit. If you have any questions or suggestions, feel free to open an issue.
 
+## License
 Modo Kit Basic is released under the MIT license. Check out the LICENSE file for more information.
 
     Modo Kit Basic is in no way affiliated with, authorized, maintained, sponsored or endorsed by Foundry

@@ -5,21 +5,25 @@ from lxu.object import Message
 # -- Kit specific imports --
 from my_modo_kit import KIT_ABV
 from my_modo_kit.command import KitCommand
+from my_modo_kit.greeting import greet
+
+# Define the name of the command
+COMMAND_NAME = f"{KIT_ABV}.name"
 
 
 class MyKitCommand(KitCommand):
     """Example command using KitCommand
 
     Examples:
-        macro: "my_modo_kit name:ModoNaught"
-        command: lx.command("my_modo_kit", name="ModoNaught")
+        macro: "mmk.name name:ModoNaught"
+        command: lx.command("mmk.name", name="ModoNaught")
     """
 
     def __init__(self):
         """Initialization of the kit command."""
         super(MyKitCommand, self).__init__()
-        # Add arguments
-        self.index_name = self.add_arg("name", symbol.sTYPE_STRING)
+        # Add the name argument for the user to input their name
+        self.index_name = self.add_arg("name", symbol.sTYPE_STRING, optional=True)
 
     def cmd_Flags(self) -> int:
         """Modo Override: Set the internal flags of the command.
@@ -30,20 +34,16 @@ class MyKitCommand(KitCommand):
         return symbol.fCMD_UNDO
 
     def basic_Execute(self, msg: Message, flags: int) -> None:
-        """Modo Override: Launches the editor for the selected Python Mesh Operator.
+        """Modo Override: Method that is run when the command is called.
 
         Args:
             msg (Message): The commands message object
             flags (int): The int result of cmd_Flags()
         """
-        if self.dyna_IsSet(self.index_name):
-            # The optional name has a value, lets grab it.
-            name = self.dyna_String(self.index_name)
-        else:
-            name = "No Name"
-
-        print(name)
+        name = self.dyna_String(self.index_name, None)
+        # Pass any processing to another function outside the command class
+        greet(name)
 
 
-# Bless the command so that Modo can register it.
-bless(MyKitCommand, f"{KIT_ABV}.my_command")
+# Bless the command with a name so that Modo can register it.
+bless(MyKitCommand, COMMAND_NAME)
