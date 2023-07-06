@@ -8,10 +8,10 @@ on:
         default: 'my-awesome-kit'
         required: true
       new_kit_abv:
-        description: "Kit abbreviation:"
+        description: "Kit Short Name:"
         default: "mak"
         required: true
-  
+
 jobs:
   rename:
     runs-on: ubuntu-latest
@@ -22,32 +22,36 @@ jobs:
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Create new branch for changes
         run: |
           git checkout -B rename-kit
-      
+
       - name: Rename Kit
         run: |
           # Sanitize name
           new_kit_name="${{ github.event.inputs.new_kit_name }}"
           new_kit_name="${new_kit_name// /_}"
           new_kit_name_under="${new_kit_name//-/_}"
-          
+          new_kit_short_name="${{ github.event.inputs.new_kit_abv }}"
+
           # Rename kit name in index.cfg
           sed -i 's/my_modo_kit/'"$new_kit_name_under"'/g' my-modo-kit/index.cfg
           sed -i 's/my-modo-kit/'"$new_kit_name"'/g' my-modo-kit/libs/my_modo_kit/__init__.py
           sed -i 's/my_modo_kit/'"$new_kit_name_under"'/g' my-modo-kit/lxserv/kit_command.py
-          sed -i 's/mmk/${{ github.event.inputs.new_kit_abv }}/g' my-modo-kit/lxserv/kit_command.py
-          sed -i 's/mmk/${{ github.event.inputs.new_kit_abv }}/g' my-modo-kit/libs/my_modo_kit/__init__.py
-          sed -i 's/mmk/${{ github.event.inputs.new_kit_abv }}/g' my-modo-kit/configs/commands.cfg
-          
+          sed -i 's/mmk/'"$new_kit_short_name"'/g' my-modo-kit/lxserv/kit_command.py
+          sed -i 's/mmk/'"$new_kit_short_name"'/g' my-modo-kit/libs/my_modo_kit/__init__.py
+          sed -i 's/mmk/'"$new_kit_short_name"'/g' my-modo-kit/configs/commands.cfg
+
+          # lxserv files must be unique lets prefix them
+          mv my-modo-kit/lxserv/kit_command.py "my-modo-kit/lxserv/${new_kit_short_name}_command.py"
+
           # Rename library folder name (Must be underscores)
           mv my-modo-kit/libs/my_modo_kit "my-modo-kit/libs/$new_kit_name_under"
 
           # Rename kit folder name
           mv my-modo-kit "$new_kit_name"
-      
+
       - name: Apply name changes
         run: |
           git config --local user.email "action@github.com"
@@ -55,7 +59,7 @@ jobs:
           git add -A
           git commit -m "Rename Modo kit" -a
           git push origin rename-kit
-      
+
       - name: Request Changes
         uses: repo-sync/pull-request@v2
         with:
