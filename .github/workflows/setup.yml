@@ -14,9 +14,13 @@ jobs:
     if: github.repository != 'Pixel-Fondue/modo-kit-basic'
     steps:
       - name: Chekout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Create new branch for changes
+        run: |
+          git checkout -B rename-branch
       
       - name: Rename Kit
         run: |
@@ -31,13 +35,13 @@ jobs:
           git config --local user.name "GitHub Action"
           git add -A
           git commit -m "Rename Modo kit" -a
+          git push origin rename-branch
       
       - name: Request Changes
         uses: repo-sync/pull-request@v2
         with:
-          source_branch: 'gha/rename_branch'
           destination_branch: 'main'
+          source_branch: 'rename-branch'
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pr_title: 'Rename kit to ${{ github.event.inputs.new_kit_name }}'
           pr_body: 'Automated changes by GitHub Action'
-          
