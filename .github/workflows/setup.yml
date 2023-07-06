@@ -1,0 +1,21 @@
+name: Setup initial kit name
+
+on:
+  workflow_dispatch:
+    inputs:
+      new_kit_name:
+        description: "Name to format the new kit to."
+        required: true
+  
+jobs:
+  rename:
+    runs-on: ubuntu-latest
+    # Only run on new repositories, not the template
+    if: github.repository != 'Pixel-Fondue/modo-kit-basic'
+    steps:
+      - name: Chekout
+        uses: actions/checkout@v2
+      
+      - name: Rename Kit
+        run: |
+          mv my-modo-kit ${{ github.event.inputs.new_kit_name }}
