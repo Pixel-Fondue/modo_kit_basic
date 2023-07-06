@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       new_kit_name:
-        description: "Name to format the new kit to."
+        description: "Set new name for kit. (my-awesome-kit)"
         required: true
   
 jobs:
@@ -15,7 +15,17 @@ jobs:
     steps:
       - name: Chekout
         uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Rename Kit
         run: |
           mv my-modo-kit ${{ github.event.inputs.new_kit_name }}
+      
+      - name: Apply new name
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git commit -m "Rename Modo kit" -a
+          git push
