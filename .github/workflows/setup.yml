@@ -6,6 +6,9 @@ on:
       new_kit_name:
         description: "Set new name for kit. (my-awesome-kit)"
         required: true
+      new_kit_abv:
+        description: "Kit abreviation. (mak)"
+        required: true
   
 jobs:
   rename:
@@ -25,7 +28,15 @@ jobs:
       - name: Rename Kit
         run: |
           # Rename kit name in index.cfg
-          sed -i 's/my_modo_kit/${{ github.event.inputs.newFolderName }}/g' my-modo-kit/index.cfg
+          sed -i 's/my_modo_kit/${{ github.event.inputs.new_kit_name }}/g' my-modo-kit/index.cfg
+          sed -i 's/my-modo-kit/${{ github.event.inputs.new_kit_name }}/g' my-modo-kit/libs/my_modo_kit/__init__.py
+          sed -i 's/mmk/${{ github.event.inputs.new_kit_abv }}/g' my-modo-kit/libs/my_modo_kit/__init__.py
+          sed -i 's/mmk/${{ github.event.inputs.new_kit_abv }}/g' my-modo-kit/lxserv/kit_command.py
+          sed -i 's/mmk/${{ github.event.inputs.new_kit_abv }}/g' my-modo-kit/configs/commands.cfg
+          
+          # Rename library folder name
+          mv my-modo-kit/libs/my_modo_kit my-modo-kit/libs/${{ github.event.inputs.new_kit_name }}
+
           # Rename kit folder name
           mv my-modo-kit ${{ github.event.inputs.new_kit_name }}
       
