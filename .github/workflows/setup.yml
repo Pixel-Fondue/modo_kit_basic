@@ -4,10 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       new_kit_name:
-        description: "Set new name for kit. (my-awesome-kit)"
+        description: "New Kit Name:"
+        default: 'my-awesome-kit'
         required: true
       new_kit_abv:
-        description: "Kit abreviation. (mak)"
+        description: "Kit abbreviation:"
+        default: "mak"
         required: true
   
 jobs:
@@ -27,18 +29,23 @@ jobs:
       
       - name: Rename Kit
         run: |
+          # Sanitize name
+          new_kit_name="${{ github.event.inputs.new_kit_name// /_ }}"
+          new_kit_name_under="${new_kit_name//-/_}"
+          
           # Rename kit name in index.cfg
-          sed -i 's/my_modo_kit/${{ github.event.inputs.new_kit_name }}/g' my-modo-kit/index.cfg
-          sed -i 's/my-modo-kit/${{ github.event.inputs.new_kit_name }}/g' my-modo-kit/libs/my_modo_kit/__init__.py
+          sed -i 's/my_modo_kit/'"$new_kit_name"'/g' specific-file-path
+          sed -i 's/my_modo_kit/'"$new_kit_name"'/g' my-modo-kit/index.cfg
+          sed -i 's/my-modo-kit/'"$new_kit_name"'/g' my-modo-kit/libs/my_modo_kit/__init__.py
           sed -i 's/mmk/${{ github.event.inputs.new_kit_abv }}/g' my-modo-kit/libs/my_modo_kit/__init__.py
           sed -i 's/mmk/${{ github.event.inputs.new_kit_abv }}/g' my-modo-kit/lxserv/kit_command.py
           sed -i 's/mmk/${{ github.event.inputs.new_kit_abv }}/g' my-modo-kit/configs/commands.cfg
           
-          # Rename library folder name
-          mv my-modo-kit/libs/my_modo_kit my-modo-kit/libs/${{ github.event.inputs.new_kit_name }}
+          # Rename library folder name (Must be underscores)
+          mv my-modo-kit/libs/my_modo_kit my-modo-kit/libs/"$new_kit_name_under"
 
           # Rename kit folder name
-          mv my-modo-kit ${{ github.event.inputs.new_kit_name }}
+          mv my-modo-kit "$new_kit_name"
       
       - name: Apply name changes
         run: |

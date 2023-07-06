@@ -26,12 +26,7 @@ may be the right choice for you:
 ## How to Use Modo Kit Basic?
 Getting started with Modo Kit Basic is straightforward. Simply select `Use this template` and create
 a new repository. This will copy the template into a new repository on your GitHub account for you to
-modify and change as needed. Since this is the basic version (No automation) you will need to manually
-change the name of the kit and commands.
-
-
-We will soon add a step-by-step guide and best practices to help you make
-the most of this template repository.
+modify and change as needed. [See Template Tutorial](./tutorial/tutorial_use_template.md)
 
 
 ## Contribute
